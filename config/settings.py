@@ -78,10 +78,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Important for Railway / reverse proxy
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
-
-# Optional but good in production
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
