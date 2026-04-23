@@ -2,23 +2,18 @@ from pathlib import Path
 import os
 import dj_database_url
 
-# Base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
-DEBUG = os.environ.get("DEBUG", "False") == "True"
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
-# Hosts
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
 
-# CSRF (IMPORTANT FOR RAILWAY)
 CSRF_TRUSTED_ORIGINS = os.environ.get(
     "CSRF_TRUSTED_ORIGINS",
     "https://intramural-team-manager-django-production.up.railway.app"
 ).split(",")
 
-# Applications
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -29,7 +24,6 @@ INSTALLED_APPS = [
     "core",
 ]
 
-# Middleware
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -42,7 +36,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "config.urls"
 
-# Templates
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -60,16 +53,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-# DATABASE (PostgreSQL from Railway)
 DATABASES = {
     "default": dj_database_url.parse(
         os.environ.get("DATABASE_URL"),
         conn_max_age=600,
-        ssl_require=True
+        ssl_require=True,
     )
 }
 
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
@@ -77,15 +68,20 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# International
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
-# Static files (basic setup)
 STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-# Default primary key
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Important for Railway / reverse proxy
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+USE_X_FORWARDED_HOST = True
+
+# Optional but good in production
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
